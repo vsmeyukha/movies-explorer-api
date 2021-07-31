@@ -58,8 +58,11 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
+    // ! вообще непонятно, что это за штука и как с ней быть
+    // !что за тип данных должен быть, откула вообще брать
     required: true,
+    unique: true,
   },
   nameRU: {
     type: String,
