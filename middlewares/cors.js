@@ -1,7 +1,7 @@
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  'https://victor.nomoredomains.monster',
-  'http://victor.nomoredomains.monster',
+  'https://victorsmeyukha-diploma.nomoredomains.monster',
+  'http://victorsmeyukha-diploma.nomoredomains.monster',
   'http://localhost:3000',
   'https://localhost:3000',
 ];
