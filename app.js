@@ -9,6 +9,7 @@ const { errors } = require('celebrate');
 const errorHandler = require('./middlewares/errorHandler');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
+const notFoundPageRouter = require('./routes/notFoundPage');
 const { createUser, login } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -41,6 +42,7 @@ app.use(auth);
 
 app.use('/', usersRouter);
 app.use('/', moviesRouter);
+app.use('/', notFoundPageRouter);
 
 app.use(errorLogger);
 
