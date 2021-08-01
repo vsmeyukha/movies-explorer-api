@@ -39,10 +39,10 @@ const deleteMovie = (req, res, next) => {
       if (String(movie.owner) !== owner) {
         throw new NotYourMovieError('НЕ покушайся на чужой фильм');
       }
-      movie.deleteOne();
-      return res.status(200).send({
-        message: 'Карточка успешно удалена',
-      });
+      return movie.deleteOne()
+        .then(() => res.status(200).send({
+          message: 'Карточка успешно удалена',
+        }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
