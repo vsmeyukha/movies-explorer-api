@@ -1,5 +1,4 @@
 const { celebrate, Joi } = require('celebrate');
-const mongoose = require('mongoose');
 const validator = require('validator');
 
 const validateUrl = (link) => {
@@ -7,12 +6,6 @@ const validateUrl = (link) => {
   if (result) {
     return link;
   } throw new Error('URL validation err');
-};
-
-const validateUserId = (id, helpers) => {
-  if (mongoose.Types.ObjectId.isValid(id)) {
-    return id;
-  } return helpers.message('Неправильный ID');
 };
 
 const userInfo = {
