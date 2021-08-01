@@ -17,9 +17,9 @@ const { validateEmailAndPassword, validateRegistration } = require('./middleware
 
 const app = express();
 
-const { PORT = 3000 } = process.env;
+const { PORT, DBPORT } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/beatfilmsdb', {
+mongoose.connect(`mongodb://localhost:${DBPORT}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
