@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 
+const limiter = require('./middlewares/limiter');
 const errorHandler = require('./middlewares/errorHandler');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
@@ -28,6 +29,8 @@ mongoose.connect(`mongodb://localhost:${DBPORT}`, {
   .then(() => console.log('Подключено к базе данных'));
 
 app.use(helmet());
+
+app.use(limiter);
 
 app.use(cookieParser());
 
