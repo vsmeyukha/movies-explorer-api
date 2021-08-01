@@ -119,6 +119,9 @@ const updateUser = (req, res, next) => {
     .orFail(new NotFoundError('Нет такого пользователя'))
     .then((user) => res.status(200).send({ user }))
     .catch((err) => {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        return next(new SameEmailError('Пользователь с такой почтой уже зарегистрирован'));
+      }
       if (err.name === 'ValidationError') {
         return next(new CastError('Вы не заполнили обязательные поля'));
       }
