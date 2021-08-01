@@ -12,6 +12,7 @@ const moviesRouter = require('./routes/movies');
 const { createUser, login } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { validateEmailAndPassword, validateRegistration } = require('./middlewares/celebrate');
 
 const app = express();
 
@@ -33,8 +34,8 @@ app.use(bodyParser.json());
 
 app.use(requestLogger);
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', validateRegistration, createUser);
+app.post('/signin', validateEmailAndPassword, login);
 
 app.use(auth);
 
