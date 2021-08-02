@@ -45,9 +45,6 @@ const createUser = (req, res, next) => {
           });
         })
         .catch((err) => {
-          if (!email || !password) {
-            return next(new CastError('Вы не заполнили обязательные поля'));
-          }
           if (err.name === 'MongoError' && err.code === 11000) {
             return next(new SameEmailError('Пользователь с такой почтой уже зарегистрирован'));
           }
@@ -121,9 +118,6 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
         return next(new SameEmailError('Пользователь с такой почтой уже зарегистрирован'));
-      }
-      if (err.name === 'ValidationError') {
-        return next(new CastError('Вы не заполнили обязательные поля'));
       }
       return next(err);
     });

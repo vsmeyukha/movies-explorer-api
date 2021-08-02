@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const asyncHandler = require('express-async-handler');
 
 const {
   getAllUsers,
@@ -9,11 +10,11 @@ const {
 
 const { validateUserInfo } = require('../middlewares/celebrate');
 
-router.get('/users', getAllUsers);
+router.get('/users', asyncHandler(getAllUsers));
 
-router.get('/users/me', getCurrentUser);
+router.get('/users/me', asyncHandler(getCurrentUser));
 
-router.patch('/users/me', validateUserInfo, updateUser);
+router.patch('/users/me', validateUserInfo, asyncHandler(updateUser));
 
 router.post('/users/me/signout', signOut);
 

@@ -18,9 +18,6 @@ const createMovie = (req, res, next) => {
   Movie.create(movie)
     .then((film) => res.status(200).send(film))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return next(new CastError('Передана не вся информация о фильме'));
-      }
       if (err.name === 'MongoError' && err.code === 11000) {
         return next(new SameEmailError('Этот фильм уже сохранен'));
       }
