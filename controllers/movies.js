@@ -1,8 +1,10 @@
 const Movie = require('../models/movie');
 const CastError = require('../errors/castError');
-const NotYourMovieError = require('../errors/notYourMovieError');
+const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/notFoundError');
-const SameEmailError = require('../errors/sameEmailError');
+const ConflictError = require('../errors/ConflictError');
+const errors = require('../constants/errors');
+const messages = require('../constants/messages');
 
 const getAllMovies = (req, res, next) => {
   Movie.find({})
@@ -19,7 +21,7 @@ const createMovie = (req, res, next) => {
     .then((film) => res.status(200).send(film))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        return next(new SameEmailError('Этот фильм уже сохранен'));
+        return next(new ConflictError(errors.conflictMovie));
       }
       return next(err);
     });
@@ -31,19 +33,19 @@ const deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
 
   Movie.findOne({ movieId })
-    .orFail(new NotFoundError('Нет такого фильма'))
+    .orFail(new NotFoundError(errors.notFoundMovie))
     .then((movie) => {
       if (String(movie.owner) !== owner) {
-        throw new NotYourMovieError('НЕ покушайся на чужой фильм');
+        throw new ForbiddenError(errors.forbiddenMovie);
       }
       return movie.deleteOne()
         .then(() => res.status(200).send({
-          message: 'Карточка успешно удалена',
+          message: messages.deleteMovie,
         }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new CastError('Вы прислали странный запрос'));
+        return next(new CastError(errors.strangeRequest));
       }
       return next(err);
     });

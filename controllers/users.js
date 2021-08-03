@@ -4,9 +4,13 @@ const jwt = require('jsonwebtoken');
 
 // ошибочки
 const CastError = require('../errors/castError');
-const SameEmailError = require('../errors/sameEmailError');
-const NotFoundUserError = require('../errors/notFoundUserError');
+const ConflictError = require('../errors/ConflictError');
+const AuthorizationError = require('../errors/authorizationError');
 const NotFoundError = require('../errors/notFoundError');
+
+// константы
+const errors = require('../constants/errors');
+const messages = require('../constants/messages');
 
 // модель
 const User = require('../models/user');
@@ -46,7 +50,7 @@ const createUser = (req, res, next) => {
         })
         .catch((err) => {
           if (err.name === 'MongoError' && err.code === 11000) {
-            return next(new SameEmailError('Пользователь с такой почтой уже зарегистрирован'));
+            return next(new ConflictError(errors.conflictEmail));
           }
           return next(err);
         });
@@ -61,12 +65,12 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new NotFoundUserError('Неправильные почта или пароль');
+        throw new AuthorizationError(errors.authorization);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new NotFoundUserError('Неправильные почта или пароль');
+            throw new AuthorizationError(errors.authorization);
           }
           const token = jwt.sign(
             { _id: user._id },
@@ -79,7 +83,7 @@ const login = (req, res, next) => {
             httpOnly: true,
           })
             .status(201).send({
-              message: 'Аутентификация прошла успешно',
+              message: messages.authentification,
             });
         });
     })
@@ -89,11 +93,11 @@ const login = (req, res, next) => {
 // получаем инфу о текущем пользователе
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new NotFoundError('Такого пользователя нет в базе'))
+    .orFail(new NotFoundError(errors.notFoundUser))
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new CastError('Вы прислали странный запрос'));
+        return next(new CastError(errors.strangeRequest));
       }
       return next(err);
     });
@@ -113,11 +117,11 @@ const updateUser = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new NotFoundError('Нет такого пользователя'))
+    .orFail(new NotFoundError(errors.notFoundUser))
     .then((user) => res.status(200).send({ user }))
     .catch((err) => {
       if (err.name === 'MongoError' && err.code === 11000) {
-        return next(new SameEmailError('Пользователь с такой почтой уже зарегистрирован'));
+        return next(new ConflictError(errors.conflictEmail));
       }
       return next(err);
     });
@@ -130,7 +134,7 @@ const signOut = (req, res, next) => {
     httpOnly: true,
   })
     .status(201).send({
-      message: 'Кука удалена',
+      message: messages.deleteCookie,
     });
 
   next();
