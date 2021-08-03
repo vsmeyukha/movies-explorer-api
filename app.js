@@ -15,12 +15,15 @@ const { createUser, login } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { validateEmailAndPassword, validateRegistration } = require('./middlewares/celebrate');
+const mongoEnvConfig = require('./constants/config');
 
 const app = express();
 
-const { PORT, DBPORT } = process.env;
+const { PORT } = process.env;
 
-mongoose.connect(`mongodb://localhost:${DBPORT}`, {
+console.log(mongoEnvConfig);
+
+mongoose.connect(mongoEnvConfig, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
