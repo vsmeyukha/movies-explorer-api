@@ -10,12 +10,12 @@ const {
 
 const { validateUserInfo } = require('../middlewares/celebrate');
 
-router.get('/users', asyncHandler(getAllUsers));
+router.get('/', asyncHandler(getAllUsers));
 
-router.get('/users/me', asyncHandler(getCurrentUser));
+router.get('/me', asyncHandler(getCurrentUser));
 
-router.patch('/users/me', validateUserInfo, asyncHandler(updateUser));
+router.patch('/me', validateUserInfo, asyncHandler(updateUser));
 
-router.post('/users/me/signout', signOut);
+router.post('/me/signout', signOut);
 
 module.exports = router;

@@ -8,13 +8,9 @@ const { errors } = require('celebrate');
 
 const limiter = require('./middlewares/limiter');
 const errorHandler = require('./middlewares/errorHandler');
-const usersRouter = require('./routes/users');
-const moviesRouter = require('./routes/movies');
-const notFoundPageRouter = require('./routes/notFoundPage');
-const { createUser, login } = require('./controllers/users');
-const { auth } = require('./middlewares/auth');
+const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { validateEmailAndPassword, validateRegistration } = require('./middlewares/celebrate');
+
 const mongoEnvConfig = require('./constants/config');
 
 const app = express();
@@ -41,14 +37,7 @@ app.use(bodyParser.json());
 
 app.use(requestLogger);
 
-app.post('/signup', validateRegistration, createUser);
-app.post('/signin', validateEmailAndPassword, login);
-
-app.use(auth);
-
-app.use('/', usersRouter);
-app.use('/', moviesRouter);
-app.use('/', notFoundPageRouter);
+app.use('/', router);
 
 app.use(errorLogger);
 
