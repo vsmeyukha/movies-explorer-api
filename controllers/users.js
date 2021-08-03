@@ -65,12 +65,12 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new AuthorizationError(errors.authorization);
+        throw new AuthorizationError(errors.authorizationEmailOrPassword);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new AuthorizationError(errors.authorization);
+            throw new AuthorizationError(errors.authorizationEmailOrPassword);
           }
           const token = jwt.sign(
             { _id: user._id },

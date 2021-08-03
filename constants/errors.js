@@ -4,9 +4,11 @@ const errors = {
   notFoundMovie: 'Нет такого фильма',
   strangeRequest: 'Вы прислали странный запрос',
   conflictEmail: 'Пользователь с такой почтой уже зарегистрирован',
-  authorization: 'Неправильные почта или пароль',
+  authorizationEmailOrPassword: 'Неправильные почта или пароль',
   notFoundUser: 'Такого пользователя нет в базе',
   notFoundPage: 'Запрашиваемый ресурс не найден',
+  authorization: 'Необходимо авторизоваться',
+  authorizationToken: 'Неверный токен',
 };
 
 module.exports = errors;
