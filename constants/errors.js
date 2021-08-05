@@ -9,6 +9,8 @@ const errors = {
   notFoundPage: 'Запрашиваемый ресурс не найден',
   authorization: 'Необходимо авторизоваться',
   authorizationToken: 'Неверный токен',
+  invalidEmail: 'Емэйл невалиден',
+  invalidLink: 'Ссылка на ресурс невалидна',
 };
 
 module.exports = errors;

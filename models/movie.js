@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validation = require('validator');
+const errors = require('../constants/errors');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validation.isURL(v);
       },
-      message: 'Здесь должна быть действительная ссылка',
+      message: errors.invalidLink,
     },
   },
   trailer: {
@@ -39,7 +40,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validation.isURL(v);
       },
-      message: 'Здесь должна быть действительная ссылка',
+      message: errors.invalidLink,
     },
   },
   thumbnail: {
@@ -49,7 +50,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validation.isURL(v);
       },
-      message: 'Здесь должна быть действительная ссылка',
+      message: errors.invalidLink,
     },
   },
   owner: {
@@ -59,8 +60,6 @@ const movieSchema = new mongoose.Schema({
   },
   movieId: {
     type: Number,
-    // ! вообще непонятно, что это за штука и как с ней быть
-    // !что за тип данных должен быть, откула вообще брать
     required: true,
     unique: true,
   },
