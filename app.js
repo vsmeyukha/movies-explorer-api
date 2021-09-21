@@ -8,6 +8,7 @@ const { errors } = require('celebrate');
 
 const limiter = require('./middlewares/limiter');
 const errorHandler = require('./middlewares/errorHandler');
+const { cors } = require('./middlewares/cors');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -28,6 +29,8 @@ mongoose.connect(mongoEnvConfig, {
   .then(() => console.log('Подключено к базе данных'));
 
 app.use(helmet());
+
+app.use(cors);
 
 app.use(limiter);
 

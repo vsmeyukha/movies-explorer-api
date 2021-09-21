@@ -6,25 +6,26 @@ const ConflictError = require('../errors/ConflictError');
 const errors = require('../constants/errors');
 const messages = require('../constants/messages');
 
-const getAllMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => res.status(200).send(movies))
-    .catch(next);
+const getAllMovies = async (req, res, next) => {
+  // ? вот так надо, но сделаем так попозже, когда порешаем с сохранением новых фильмов:
+  const allMovies = await Movie.find({ owner: req.user._id });
+  res.status(200).send(allMovies);
 };
 
-const createMovie = (req, res, next) => {
+const createMovie = async (req, res, next) => {
   const owner = req.user._id;
 
   const movie = { ...req.body, owner };
 
-  Movie.create(movie)
+  const allMovies = await Movie.find({ owner: req.user._id });
+
+  const movieIsAlreadySaved = allMovies.some((oneMovie) => oneMovie.movieId === req.body.movieId);
+
+  if (movieIsAlreadySaved) {
+    return next(new ConflictError(errors.conflictMovie));
+  } return Movie.create(movie)
     .then((film) => res.status(200).send(film))
-    .catch((err) => {
-      if (err.name === 'MongoError' && err.code === 11000) {
-        return next(new ConflictError(errors.conflictMovie));
-      }
-      return next(err);
-    });
+    .catch((err) => next(err));
 };
 
 const deleteMovie = (req, res, next) => {
