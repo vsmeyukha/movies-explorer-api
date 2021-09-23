@@ -195,7 +195,6 @@ const signOut = (req, res) => {
     .status(201).send({
       message: messages.deleteCookie,
     });
-  console.log('123');
 };
 
 module.exports = {

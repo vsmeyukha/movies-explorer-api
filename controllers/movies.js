@@ -17,7 +17,7 @@ const createMovie = async (req, res, next) => {
 
   const movie = { ...req.body, owner };
 
-  const allMovies = await Movie.find({ owner: req.user._id });
+  const allMovies = await Movie.find({ owner: req.user._id }); // поменять на movie.count
 
   const movieIsAlreadySaved = allMovies.some((oneMovie) => oneMovie.movieId === req.body.movieId);
 
@@ -28,22 +28,27 @@ const createMovie = async (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const deleteMovie = (req, res, next) => {
+const deleteMovie = async (req, res, next) => {
   const owner = req.user._id;
 
   const { movieId } = req.params;
+  console.log(movieId);
+  // тут просто закомментировал, передаем в поиск по айди просто парамс
+  // также в роуте мувис пока снес миддлвару, которая валидирует movieId
 
-  Movie.findOne({ movieId })
+  // const allMovies = await Movie.find({ owner });
+
+  // const movieIsAlreadySaved = allMovies.some((oneMovie) => oneMovie.movieId === movieId);
+
+  Movie.findOne({
+    movieId,
+    owner,
+  })
     .orFail(new NotFoundError(errors.notFoundMovie))
-    .then((movie) => {
-      if (String(movie.owner) !== owner) {
-        throw new ForbiddenError(errors.forbiddenMovie);
-      }
-      return movie.deleteOne()
-        .then(() => res.status(200).send({
-          message: messages.deleteMovie,
-        }));
-    })
+    .then((movie) => movie.deleteOne()
+      .then(() => res.status(200).send({
+        message: messages.deleteMovie,
+      })))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new CastError(errors.strangeRequest));
