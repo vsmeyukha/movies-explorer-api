@@ -28,9 +28,9 @@ mongoose.connect(mongoEnvConfig, {
 })
   .then(() => console.log('Подключено к базе данных'));
 
-app.use(helmet());
-
 app.use(cors);
+
+app.use(helmet());
 
 app.use(limiter);
 
