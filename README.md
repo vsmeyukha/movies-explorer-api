@@ -1,3 +1,11 @@
-# movies-explorer-api
+# Backend-часть SPA-приложения по поиску фильмов. 
 
-адрес домена: https://api.victorsmeyukhadiploma.nomoredomains.monster/
+Функционал: 
+- сохранение выбранных пользователем фильмов в MongoDB-базу;
+- удаление фильмов их базу сохранённых;
+- регистрация и авторизация пользователя;
+- обновление данных о пользователе;
+
+Стек: Node.js, Express.js, MongoDB. 
+
+Адрес домена: https://api.victorsmeyukhadiploma.nomoredomains.monster/
